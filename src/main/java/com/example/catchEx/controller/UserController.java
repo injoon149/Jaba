@@ -54,8 +54,8 @@ public class UserController {
 
 	}
 
-	@PostMapping("/user")
-	public @ResponseBody String updateUser(@RequestBody User user){
+	@PutMapping("/user")
+	public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user){
 		
 		
 		 User findUser = userRepository.findById(user.getId()).orElseThrow(()-> {
@@ -63,7 +63,8 @@ public class UserController {
 		 findUser.setUsername(user.getUsername());
 		 findUser.setUser_pwd(user.getUser_pwd());
 		  
-		 userRepository.save(findUser); return "회원 수정 성공";
+		 userRepository.save(findUser); 
+		 return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 수정 성공.");
 		 
 		
 			/*
@@ -79,10 +80,10 @@ public class UserController {
 	}
 
 	@DeleteMapping("/user/{id}")
-	public @ResponseBody String deleteUser(@PathVariable int id) {
+	public @ResponseBody ResponseDTO<?> deleteUser(@PathVariable int id, @RequestBody User user) {
 		userRepository.deleteById(id);
 		;
-		return "회원 삭제 성공";
+		return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 삭제 성공.");
 	}
 
 	@GetMapping("/user/list")
