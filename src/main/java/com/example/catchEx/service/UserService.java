@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.catchEx.domain.RoleType;
+
 import com.example.catchEx.domain.User;
 import com.example.catchEx.persistence.UserRepository;
 
@@ -27,11 +27,10 @@ public class UserService {
 				});
 		
 		return findUser;
-	}
+	} 
 	
 	@Transactional
 	public void insertUser(User user) {
-		user.setRole(RoleType.USER);
 		userRepository.save(user);
 	}
 
