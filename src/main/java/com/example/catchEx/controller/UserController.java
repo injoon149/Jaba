@@ -62,19 +62,10 @@ public class UserController {
 		   return new JBlogException(user.getId() + "번 회원이 없습니다."); });
 		 findUser.setUsername(user.getUsername());
 		 findUser.setUser_pwd(user.getUser_pwd());
+		 findUser.setEmail(user.getEmail());
 		  
 		 userRepository.save(findUser); 
 		 return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 수정 성공.");
-		 
-		
-			/*
-			 * String secretKey = ""; String message = ""; SecretKeySpec signingKey = new
-			 * SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256"); Mac mac =
-			 * Mac.getInstance("HmacSHA256"); mac.init(signingKey);
-			 * 
-			 * byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8")); String
-			 * encodeBase64String = Base64.encodeBase64String(rawHmac);
-			 */
 		 
 
 	}
@@ -105,10 +96,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/auth/insertUser")
-	public String insertUser() {
-		return "user/insertUser";
-	}
 
 	@PostMapping("/auth/insertUser")
 	public @ResponseBody ResponseDTO<?> insertUser(@RequestBody User user) {
@@ -120,14 +107,19 @@ public class UserController {
 		} else {
 			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), user.getUsername() + "님은 이미 회원입니다.");
 		}
-	} 
-	/*
-	 * @PostMapping("/auth/login") public @ResponseBody ResponseDTO<?>
-	 * login(@RequestBody User user, HttpSession session) { user.findUser =
-	 * userService.getUser(user.getUsername());
-	 * 
-	 * 
-	 * }
-	 */
+	}
+	
+	@PostMapping("/auth/check")
+	public @ResponseBody ResponseDTO<?> login(@RequestBody User user)
+	{
+		User findUser = userService.getUser(user.getEmail());
+		
+		if(findUser.getEmail() == null) {
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), "사용 가능한 아이디입니다."); }
+		else {
+			return new ResponseDTO<>(HttpStatus.OK.value(), "이미 가입된 이메일 주소예요.");
+			}
+	}
+
 
 }

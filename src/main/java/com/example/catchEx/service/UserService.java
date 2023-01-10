@@ -16,9 +16,9 @@ public class UserService {
 	private UserRepository userRepository;
 	
 	@Transactional(readOnly = true)
-	public User getUser(String username) {
+	public User getUser(String useremail) {
 		//검색 결과가 없을 때 빈 User 객체 반환
-		User findUser = userRepository.findByUsername(username).orElseGet(
+		User findUser = userRepository.findByEmail(useremail).orElseGet(
 				new Supplier<User>() {
 					@Override
 					public User get() {
